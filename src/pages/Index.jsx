@@ -66,6 +66,20 @@ const Index = () => {
     });
   };
 
+  const exportAllNotes = () => {
+    const blob = new Blob([notes.join("\n")], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "all_notes.txt";
+    link.click();
+    toast({
+      title: "All notes exported.",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Container centerContent maxW="container.md" height="100vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <VStack spacing={4} width="100%">
@@ -81,6 +95,9 @@ const Index = () => {
           </Button>
           <Button onClick={exportSelectedNotes} colorScheme="blue" isDisabled={selectedNotes.length === 0}>
             Export Selected
+          </Button>
+          <Button onClick={exportAllNotes} colorScheme="purple">
+            Export All
           </Button>
         </HStack>
         <Table variant="simple" width="100%">
