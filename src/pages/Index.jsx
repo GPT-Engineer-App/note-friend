@@ -11,23 +11,33 @@ const Index = () => {
   const [inputValue, setInputValue] = useState("");
 
   const addNote = () => {
-    if (inputValue.trim() !== "") {
+    if (editIndex !== null) {
+      const newNotes = [...notes];
+      newNotes[editIndex] = inputValue;
+      setNotes(newNotes);
+      setEditIndex(null);
+      setInputValue("");
+      toast({
+        title: "Note updated.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    } else if (inputValue.trim() !== "") {
       setNotes([...notes, inputValue]);
       setInputValue("");
+      toast({
+        title: "Note added.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 
   const deleteNote = (index) => {
     const newNotes = notes.filter((_, i) => i !== index);
     setNotes(newNotes);
-  };
-
-  const saveNote = (index) => {
-    const newNotes = [...notes];
-    newNotes[index] = editValue;
-    setNotes(newNotes);
-    setEditIndex(null);
-    setEditValue("");
   };
 
   const handleSelectNote = (index) => {
@@ -104,7 +114,7 @@ const Index = () => {
         <HStack width="100%">
           <Textarea placeholder="Enter your note" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
           <Button onClick={addNote} colorScheme="teal">
-            Add Note
+            {editIndex !== null ? "Save Note" : "Add Note"}
           </Button>
         </HStack>
         <HStack width="100%" justifyContent="flex-end">
@@ -136,23 +146,17 @@ const Index = () => {
                 <Td>
                   <Checkbox isChecked={selectedNotes.includes(index)} onChange={() => handleSelectNote(index)} />
                 </Td>
-                <Td>{editIndex === index ? <Textarea value={editValue} onChange={(e) => setEditValue(e.target.value)} /> : note}</Td>
+                <Td>{note}</Td>
                 <Td>
-                  {editIndex === index ? (
-                    <Button onClick={() => saveNote(index)} colorScheme="green">
-                      Save
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => {
-                        setEditIndex(index);
-                        setEditValue(note);
-                      }}
-                      colorScheme="yellow"
-                    >
-                      Edit
-                    </Button>
-                  )}
+                  <Button
+                    onClick={() => {
+                      setEditIndex(index);
+                      setInputValue(note);
+                    }}
+                    colorScheme="yellow"
+                  >
+                    Edit
+                  </Button>
                   <IconButton aria-label="Delete note" icon={<FaTrash />} onClick={() => deleteNote(index)} />
                 </Td>
               </Tr>
