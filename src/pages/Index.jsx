@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, VStack, HStack, Textarea, Button, Text, Box, IconButton, Table, Thead, Tbody, Tr, Th, Td, Checkbox, useToast } from "@chakra-ui/react";
+import { Container, VStack, HStack, Textarea, Button, Text, Box, IconButton, Table, Thead, Tbody, Tr, Th, Td, Checkbox, useToast, Input } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 
 const Index = () => {
@@ -80,6 +80,24 @@ const Index = () => {
     });
   };
 
+  const importNotes = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const importedNotes = e.target.result.split("\n");
+        setNotes(importedNotes);
+        toast({
+          title: "Notes imported.",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <Container centerContent maxW="container.md" height="100vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
       <VStack spacing={4} width="100%">
@@ -95,6 +113,10 @@ const Index = () => {
           </Button>
           <Button onClick={exportSelectedNotes} colorScheme="blue" isDisabled={selectedNotes.length === 0}>
             Export Selected
+          </Button>
+          <Input type="file" accept=".txt" onChange={importNotes} display="none" id="import-notes-input" />
+          <Button as="label" htmlFor="import-notes-input" colorScheme="orange">
+            Import Notes
           </Button>
           <Button onClick={exportAllNotes} colorScheme="purple">
             Export All
