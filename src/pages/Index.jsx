@@ -5,6 +5,8 @@ import { FaTrash } from "react-icons/fa";
 const Index = () => {
   const [notes, setNotes] = useState([]);
   const [selectedNotes, setSelectedNotes] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
+  const [editValue, setEditValue] = useState("");
   const toast = useToast();
   const [inputValue, setInputValue] = useState("");
 
@@ -18,6 +20,14 @@ const Index = () => {
   const deleteNote = (index) => {
     const newNotes = notes.filter((_, i) => i !== index);
     setNotes(newNotes);
+  };
+
+  const saveNote = (index) => {
+    const newNotes = [...notes];
+    newNotes[index] = editValue;
+    setNotes(newNotes);
+    setEditIndex(null);
+    setEditValue("");
   };
 
   const handleSelectNote = (index) => {
@@ -87,8 +97,23 @@ const Index = () => {
                 <Td>
                   <Checkbox isChecked={selectedNotes.includes(index)} onChange={() => handleSelectNote(index)} />
                 </Td>
-                <Td>{note}</Td>
+                <Td>{editIndex === index ? <Textarea value={editValue} onChange={(e) => setEditValue(e.target.value)} /> : note}</Td>
                 <Td>
+                  {editIndex === index ? (
+                    <Button onClick={() => saveNote(index)} colorScheme="green">
+                      Save
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        setEditIndex(index);
+                        setEditValue(note);
+                      }}
+                      colorScheme="yellow"
+                    >
+                      Edit
+                    </Button>
+                  )}
                   <IconButton aria-label="Delete note" icon={<FaTrash />} onClick={() => deleteNote(index)} />
                 </Td>
               </Tr>
