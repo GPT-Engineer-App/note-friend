@@ -53,10 +53,10 @@ const Index = () => {
 
   const exportSelectedNotes = () => {
     const selected = notes.filter((_, index) => selectedNotes.includes(index));
-    const blob = new Blob([selected.join("\n")], { type: "text/plain" });
+    const blob = new Blob([JSON.stringify(selected, null, 2)], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "notes.txt";
+    link.download = "notes.json";
     link.click();
     toast({
       title: "Notes exported.",
@@ -67,10 +67,10 @@ const Index = () => {
   };
 
   const exportAllNotes = () => {
-    const blob = new Blob([notes.join("\n")], { type: "text/plain" });
+    const blob = new Blob([JSON.stringify(notes, null, 2)], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "all_notes.txt";
+    link.download = "all_notes.json";
     link.click();
     toast({
       title: "All notes exported.",
@@ -85,7 +85,7 @@ const Index = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const importedNotes = e.target.result.split("\n");
+        const importedNotes = JSON.parse(e.target.result);
         setNotes(importedNotes);
         toast({
           title: "Notes imported.",
