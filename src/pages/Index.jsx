@@ -114,7 +114,7 @@ const Index = () => {
           <Button onClick={exportSelectedNotes} colorScheme="blue" isDisabled={selectedNotes.length === 0}>
             Export Selected
           </Button>
-          <Input type="file" accept=".txt" onChange={importNotes} display="none" id="import-notes-input" />
+          <Input type="file" accept=".json" onChange={importNotes} display="none" id="import-notes-input" />
           <Button as="label" htmlFor="import-notes-input" colorScheme="orange">
             Import Notes
           </Button>
