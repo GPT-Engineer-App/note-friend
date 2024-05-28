@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Container, VStack, HStack, Textarea, Button, Text, Box, IconButton, Table, Thead, Tbody, Tr, Th, Td, Checkbox, useToast, Input } from "@chakra-ui/react";
+import { Container, VStack, HStack, Textarea, Button, Text, Box, IconButton, Table, Thead, Tbody, Tr, Th, Td, Checkbox, useToast, Input, Tag, TagLabel, TagCloseButton, Select } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 
 const Index = () => {
   const [notes, setNotes] = useState([]);
+  const [tags, setTags] = useState([]);
   const [selectedNotes, setSelectedNotes] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
